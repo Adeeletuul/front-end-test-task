@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, Container } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 const Footer = () => {
   return (
@@ -15,7 +15,7 @@ const Footer = () => {
         bottom: 0,
       }}
     >
-      <Typography variant="body" color="white">
+      <Typography variant="body1" color="white">
         {"Copyright © Adeele Tuuleveski "}
         {new Date().getFullYear()}
       </Typography>

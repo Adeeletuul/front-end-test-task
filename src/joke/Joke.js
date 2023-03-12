@@ -130,7 +130,6 @@ const Joke = () => {
             onClick={handlePreviousJokeClick}
           >
             <ChevronLeftIcon
-              color="white"
               sx={{ fontSize: 50, color: "white" }}
             />
           </IconButton>

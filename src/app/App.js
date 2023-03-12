@@ -5,6 +5,7 @@ import Home from "../home/Home";
 import Joke from "../joke/Joke";
 import Saved from "../saved/Saved";
 import "../App.css";
+import React from "react";
 
 function App() {
   return (
