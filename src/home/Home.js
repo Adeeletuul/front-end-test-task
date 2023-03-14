@@ -19,23 +19,20 @@ const Home = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log("dispatchitud");
     dispatch(getCategories());
   }, []);
 
   const handleClick = () => {
-    console.log("handleClike tehtud");
     if (selectedCategory) {
-      console.log("valitud category");
       navigate(`/joke/${selectedCategory}`);
     } else {
-      console.log("valitud random");
       navigate(`/joke/random`);
     }
   };
 
   return (
     <Container
+      maxWidth="xl"
       sx={{
         display: "flex",
         alignItems: "center",
@@ -56,21 +53,19 @@ const Home = () => {
       >
         <Button
           variant="contained"
-          size="large"
           onClick={handleClick}
-          sx={{ backgroundColor: "white", color: "#004d51", padding: "15px" }}
+          sx={{ my: 2, backgroundColor: "white", color: "#004d51" }}
         >
-          GET A RANDOM JOKE
+          <Typography variant="h6"> GET A RANDOM JOKE</Typography>
         </Button>
         <div
           style={{
             paddingLeft: "20px",
             paddingRight: "20px",
-            fontSize: "25px",
             color: "white",
           }}
         >
-          OR
+          <Typography variant="h6">OR</Typography>
         </div>
         <Box
           sx={{
@@ -87,8 +82,8 @@ const Home = () => {
             disablePortal
             id="combo-box-demo"
             options={categories}
+            fullWidth
             sx={{
-              width: "250px",
               paddingTop: "15px",
               paddingBottom: "10px",
             }}
@@ -104,11 +99,10 @@ const Home = () => {
           />
           <Button
             variant="contained"
-            size="large"
             onClick={handleClick}
-            sx={{ backgroundColor: "white", color: "#004d51" }}
+            sx={{ my: 1, backgroundColor: "white", color: "#004d51" }}
           >
-            GET A JOKE
+            <Typography variant="h6"> GET A JOKE</Typography>
           </Button>
         </Box>
       </div>

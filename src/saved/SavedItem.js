@@ -16,19 +16,11 @@ import CancelIcon from "@mui/icons-material/Cancel";
 
 const SavedItem = ({ jokeData, joke }) => {
   const [editOn, setEditOn] = useState(false);
-  const [jokeNewValue, setJokeNewValue] = useState();
+  const [jokeNewValue, setJokeNewValue] = useState(joke);
   const dispatch = useDispatch();
 
-  const handleEditOn = () => {
-    setEditOn(true);
-  };
-
-  const handleEdit = () => {
+  const handleEdit = (event) => {
     dispatch(editSavedJoke(jokeData, jokeNewValue));
-    setEditOn(false);
-  };
-
-  const handleEditOff = () => {
     setEditOn(false);
   };
 
@@ -65,7 +57,7 @@ const SavedItem = ({ jokeData, joke }) => {
               <IconButton
                 aria-label="edit joke"
                 component="label"
-                onClick={handleEditOn}
+                onClick={() => setEditOn(true)}
               >
                 <EditIcon style={{ color: "#00ABB3" }} fontSize="large" />
               </IconButton>
@@ -90,7 +82,7 @@ const SavedItem = ({ jokeData, joke }) => {
               <IconButton
                 aria-label="cancel edit joke"
                 component="label"
-                onClick={handleEditOff}
+                onClick={() => setEditOn(false)}
               >
                 <CancelIcon style={{ color: "#00ABB3" }} fontSize="large" />
               </IconButton>

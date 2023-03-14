@@ -1,23 +1,29 @@
 import axios from "axios";
-
 export const GET_JOKE = "joke/getJoke";
-
 export const getJoke =
-  (category, resetJokes = false) =>
-  async (dispatch) => {
+  (category, index, resetJokes = false) =>
+  async (dispatch, getState) => {
     try {
-      let joke;
+      let newJoke;
       if (category === "random") {
-        joke = await axios.get(`https://api.chucknorris.io/jokes/random`);
+        newJoke = await axios.get(`https://api.chucknorris.io/jokes/random`);
       } else {
-        joke = await axios.get(
+        newJoke = await axios.get(
           `https://api.chucknorris.io/jokes/random?category=${category}`
         );
       }
-      dispatch({
-        type: GET_JOKE,
-        payload: { joke: joke.data, resetJokes },
-      });
+      const onJubaOlnud = getState().jokes.some(
+        (joke) => joke.id === newJoke.data.id
+      );
+
+      if (!onJubaOlnud) {
+        dispatch({
+          type: GET_JOKE,
+          payload: { jokeData: newJoke.data, resetJokes },
+        });
+        return index + 1;
+      }
+      return index + 1;
     } catch (error) {
       console.log(error);
     }

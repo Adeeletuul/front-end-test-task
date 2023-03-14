@@ -14,15 +14,14 @@ const Joke = () => {
   const [jokeIndex, setJokeIndex] = useState(0);
 
   const jokes = useSelector((state) => state.jokes);
-  console.log(jokes);
-  const joke = jokes[jokeIndex] || {};
+  const joke = jokes[jokeIndex] || null;
   const savedJokes = useSelector((state) => state.savedJokes);
 
   const { category } = useParams();
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getJoke(category, true));
+    dispatch(getJoke(category, jokeIndex, true));
   }, []);
 
   const jokeInSavedJokes = useMemo(() => {
@@ -36,10 +35,10 @@ const Joke = () => {
     }
   };
 
-  const handleNewJokeClick = () => {
+  const handleNewJokeClick = async () => {
     if (jokesFromArray === false) {
-      dispatch(getJoke(category));
-      setJokeIndex(jokeIndex + 1);
+      const newIndex = await dispatch(getJoke(category, jokeIndex));
+      setJokeIndex(newIndex);
     } else if (jokesFromArray === true && jokeIndex === jokes.length - 2) {
       setJokeIndex(jokeIndex + 1);
       setJokesFromArray(false);
@@ -57,93 +56,147 @@ const Joke = () => {
   };
 
   return (
-    <Container
-      maxWidth={false}
-      sx={{
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#00ABB3",
-        height: "100%",
-      }}
-    >
-      <Box sx={{ maxWidth: "50%" }}>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "end",
-          }}
-        >
-          <IconButton
-            aria-label="save joke"
-            component="label"
-            size="medium"
-            onClick={handleSaveJokeClick}
-            sx={{
-              position: "absolute",
-            }}
-          >
-            {jokeInSavedJokes ? (
-              <FavoriteIcon
+    <>
+      <Container
+        maxWidth="xl"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "#00ABB3",
+          height: "100%",
+        }}
+      >
+        <Box sx={{ minWidth: "fit-content" }}>
+          {joke === null && (
+            <>
+              <Box sx={{ backgroundColor: "white" }}>
+                <Typography
+                  variant="h5"
+                  sx={{
+                    color: "grey",
+                    fontStyle: "italic",
+                    paddingLeft: "50px",
+                    paddingRight: "50px",
+                    paddingTop: "70px",
+                    paddingBottom: "70px",
+                  }}
+                >
+                  Sadly there is no more jokes in this category
+                </Typography>
+              </Box>
+              <Box
                 sx={{
-                  color: "#FFEA20",
-                  fontSize: 50,
+                  display: "flex",
+                  justifyContent: "end",
+                  backgroundColor: "#3C4048",
+                  padding: 0,
                 }}
-              />
-            ) : (
-              <FavoriteBorderIcon
+              >
+                {jokeIndex > 0 && (
+                  <IconButton
+                    aria-label="previous joke"
+                    component="label"
+                    size="medium"
+                    color="white"
+                    onClick={handlePreviousJokeClick}
+                  >
+                    <ChevronLeftIcon sx={{ fontSize: 50, color: "white" }} />
+                  </IconButton>
+                )}
+                <IconButton
+                  aria-label="next joke"
+                  component="label"
+                  size="medium"
+                  onClick={handleNewJokeClick}
+                >
+                  <NavigateNextIcon sx={{ fontSize: 50, color: "white" }} />
+                </IconButton>
+              </Box>
+            </>
+          )}
+          {joke !== null && (
+            <>
+              <Box
                 sx={{
-                  fontSize: 50,
+                  display: "flex",
+                  justifyContent: "end",
                 }}
-              />
-            )}
-          </IconButton>
+              >
+                <IconButton
+                  aria-label="save joke"
+                  component="label"
+                  size="medium"
+                  onClick={handleSaveJokeClick}
+                  sx={{
+                    position: "absolute",
+                  }}
+                >
+                  {jokeInSavedJokes ? (
+                    <FavoriteIcon
+                      sx={{
+                        color: "#FFEA20",
+                        fontSize: 50,
+                      }}
+                    />
+                  ) : (
+                    <FavoriteBorderIcon
+                      sx={{
+                        fontSize: 50,
+                      }}
+                    />
+                  )}
+                </IconButton>
+              </Box>
+              <Box sx={{ backgroundColor: "white" }}>
+                <Typography
+                  variant="h4"
+                  sx={{
+                    paddingLeft: "50px",
+                    paddingRight: "50px",
+                    paddingTop: "70px",
+                    paddingBottom: "70px",
+                    color: "#00656b",
+                    fontWeight: "bold",
+                  }}
+                >
+                  {joke.value}
+                </Typography>
+              </Box>
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "end",
+                  backgroundColor: "#3C4048",
+                  padding: 0,
+                }}
+              >
+                {jokeIndex > 0 && (
+                  <IconButton
+                    aria-label="previous joke"
+                    component="label"
+                    size="medium"
+                    color="white"
+                    onClick={handlePreviousJokeClick}
+                  >
+                    <ChevronLeftIcon sx={{ fontSize: 50, color: "white" }} />
+                  </IconButton>
+                )}
+                <IconButton
+                  aria-label="next joke"
+                  component="label"
+                  size="medium"
+                  onClick={handleNewJokeClick}
+                >
+                  <NavigateNextIcon sx={{ fontSize: 50, color: "white" }} />
+                </IconButton>
+              </Box>
+            </>
+          )}
         </Box>
-        <Box sx={{ backgroundColor: "white" }}>
-          <Typography
-            variant="h4"
-            sx={{
-              paddingLeft: "50px",
-              paddingRight: "50px",
-              paddingTop: "70px",
-              paddingBottom: "70px",
-              color: "#00656b",
-              fontWeight: "bold",
-            }}
-          >
-            {joke.value}
-          </Typography>
-        </Box>
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "end",
-            backgroundColor: "#3C4048",
-            padding: 0,
-          }}
-        >
-          <IconButton
-            aria-label="next joke"
-            component="label"
-            size="medium"
-            onClick={handlePreviousJokeClick}
-          >
-            <ChevronLeftIcon
-              sx={{ fontSize: 50, color: "white" }}
-            />
-          </IconButton>
-          <IconButton
-            aria-label="next joke"
-            component="label"
-            size="medium"
-            onClick={handleNewJokeClick}
-          >
-            <NavigateNextIcon sx={{ fontSize: 50, color: "white" }} />
-          </IconButton>
-        </Box>
-      </Box>
-    </Container>
+      </Container>
+    </>
   );
 };
 
